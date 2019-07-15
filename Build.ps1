@@ -4,13 +4,21 @@
 
 # Artifact name will be in format: " <PackageId>.<PackageVersion>.nupkg "
 
-$project = "D:\ChangeAutomation-PowerShell\ERP.Database\ERP.Database.sqlproj"
-$exportPath = "C:\Users\PC\Desktop\Artifact"
+$projectRelaPath = "ERP.Database\ERP.Database.sqlproj"
+$exportRelaPath = "Artifact"
 $PackageId = "MyDataBase"
 $PackageVersion = "1.0.0"
 
-$validatedProject = $project | Invoke-DatabaseBuild
+$project = $(Resolve-Path -Path $projectRelaPath)
+$exportPath = $(Resolve-Path -Path $exportRelaPath)
+
+if (Test-Path -Path $exportPath)
+{
+    Remove-Item $exportPath -force -recurse
+}
+mkdir $exportPath
+
+$validatedProject =  $project | Invoke-DatabaseBuild
 $buildArtifact = $validatedProject | New-DatabaseBuildArtifact -PackageId $PackageId -PackageVersion $PackageVersion
 $buildArtifact | Export-DatabaseBuildArtifact -Path $exportPath
 
-# DONE

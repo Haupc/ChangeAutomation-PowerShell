@@ -1,7 +1,7 @@
 ﻿/*
-    Target database:    ERP2 (configurable)
+    Target database:    ERP.Database (configurable)
     Target instance:    (any)
-    Generated date:     7/15/2019 10:37:05 AM
+    Generated date:     7/15/2019 1:54:18 PM
     Generated on:       PC
     Package version:    (undefined)
     Migration version:  (n/a)
@@ -31,10 +31,10 @@
 ---- SQLCMD Variables
 ---- This script is designed to be called by SQLCMD.EXE with variables specified on the command line.
 ---- However you can also run it in SQL Management Studio by uncommenting this section (CTRL+K, CTRL+U).
---:setvar DatabaseName "ERP2"
+--:setvar DatabaseName "ERP.Database"
 --:setvar ReleaseVersion ""
 --:setvar ForceDeployWithoutBaseline "False"
---:setvar DefaultFilePrefix "ERP2"
+--:setvar DefaultFilePrefix "ERP.Database"
 --:setvar DefaultDataPath ""
 --:setvar DefaultLogPath ""
 --:setvar DefaultBackupPath ""
@@ -109,10 +109,7 @@ IF (DB_ID(N'$(DatabaseName)') IS NULL)
 BEGIN
 	CREATE DATABASE [$(DatabaseName)]; -- MODIFY THIS STATEMENT TO SPECIFY A COLLATION FOR YOUR DATABASE
 END
- Print N'Pre---------------------
- 0--------------------------------
- ------------------------------------------------
- -------------------------------------------------------'
+
 GO
 -------------------------- END PRE-DEPLOYMENT SCRIPT: "Pre-Deployment\01_Create_Database.sql" ----------------------------
 
@@ -3082,7 +3079,8 @@ BEGIN
 END
 
 GO
-EXECUTE ('PRINT N''Dropping foreign keys from [HR].[Employee]''
+EXECUTE ('
+PRINT N''Dropping foreign keys from [HR].[Employee]''
 ');
 
 GO
@@ -3334,7 +3332,7 @@ IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHE
 GO
 IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('f72418af-4d73-4e1f-b785-fde3072be56b' AS UNIQUEIDENTIFIER))
   INSERT [$(DatabaseName)].[dbo].[__MigrationLog] ([migration_id], [script_checksum], [script_filename], [complete_dt], [applied_by], [deployed], [version], [package_version], [release_version])
-  VALUES                                         (CAST ('f72418af-4d73-4e1f-b785-fde3072be56b' AS UNIQUEIDENTIFIER), 'BD08E1041CA72568061D4534D362A334AA864FE936B71F5B533118ADA61D59A8', 'Migrations\006_20190704-1500_PC.sql', SYSDATETIME(), SYSTEM_USER, 1, NULL, '$(PackageVersion)', CASE '$(ReleaseVersion)' WHEN '' THEN NULL ELSE '$(ReleaseVersion)' END);
+  VALUES                                         (CAST ('f72418af-4d73-4e1f-b785-fde3072be56b' AS UNIQUEIDENTIFIER), 'A6835D434B1369F59D42FD3B36BC30E2D2BD8F03A2652640DE5B0728FC9A3CF2', 'Migrations\006_20190704-1500_PC.sql', SYSDATETIME(), SYSTEM_USER, 1, NULL, '$(PackageVersion)', CASE '$(ReleaseVersion)' WHEN '' THEN NULL ELSE '$(ReleaseVersion)' END);
 
 GO
 SET IMPLICIT_TRANSACTIONS, NUMERIC_ROUNDABORT OFF;
@@ -6894,36 +6892,608 @@ IF DB_NAME() != '$(DatabaseName)'
   USE [$(DatabaseName)];
 
 GO
-IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('b0192e9b-1d8b-4929-813b-961fa2f82463' AS UNIQUEIDENTIFIER))
+IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('04cd6b05-ee50-4ad6-859d-8f43f6a858bc' AS UNIQUEIDENTIFIER))
   PRINT '
 
-***** EXECUTING MIGRATION "Migrations\014_20190713-1805_PC.sql", ID: {b0192e9b-1d8b-4929-813b-961fa2f82463} *****';
+***** EXECUTING MIGRATION "Migrations\014_20190713-1813_PC.sql", ID: {04cd6b05-ee50-4ad6-859d-8f43f6a858bc} *****';
 
 GO
-IF EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('b0192e9b-1d8b-4929-813b-961fa2f82463' AS UNIQUEIDENTIFIER))
+IF EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('04cd6b05-ee50-4ad6-859d-8f43f6a858bc' AS UNIQUEIDENTIFIER))
 BEGIN
-  PRINT '----- Skipping "Migrations\014_20190713-1805_PC.sql", ID: {b0192e9b-1d8b-4929-813b-961fa2f82463} as it has already been run on this database';
+  PRINT '----- Skipping "Migrations\014_20190713-1813_PC.sql", ID: {04cd6b05-ee50-4ad6-859d-8f43f6a858bc} as it has already been run on this database';
   SET NOEXEC ON;
 END
 
 GO
 EXECUTE ('
-PRINT N''Creating [dbo].[Table_1]''
+PRINT N''Dropping foreign keys from [APPS].[Employee]''
 ');
 
 GO
-EXECUTE ('CREATE TABLE [dbo].[Table_1]
+EXECUTE ('ALTER TABLE [APPS].[Employee] DROP CONSTRAINT [FK_Employee_BusinessGroup]
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Employee] DROP CONSTRAINT [FK_Employee_JobLevel]
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Employee] DROP CONSTRAINT [FK_Employee_JobTitle]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping foreign keys from [HR].[EmployeePosition]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [HR].[EmployeePosition] DROP CONSTRAINT [FK_EmployeeGroup_Employee]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping foreign keys from [HR].[JobHistory]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [HR].[JobHistory] DROP CONSTRAINT [FK_JobHistory_Employee]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping foreign keys from [dbo].[StockAdjustment]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [dbo].[StockAdjustment] DROP CONSTRAINT [FK_StockAdjustment_Employee]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping foreign keys from [dbo].[StockRequest]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [dbo].[StockRequest] DROP CONSTRAINT [FK_StockRequest_Employee]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping foreign keys from [APPSYS].[User]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPSYS].[User] DROP CONSTRAINT [FK_User_Employee]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping foreign keys from [APPS].[UnitOfMeasure]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[UnitOfMeasure] DROP CONSTRAINT [FK_UnitOfMeasure_BusinessGroup]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping foreign keys from [dbo].[StockRequestDetail]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [dbo].[StockRequestDetail] DROP CONSTRAINT [FK_StockRequestDetail_UnitOfMeasure]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping foreign keys from [APPS].[Tax]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Tax] DROP CONSTRAINT [FK_Tax_UnitOfMeasure]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping foreign keys from [APPS].[TaxTemplateDetail]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[TaxTemplateDetail] DROP CONSTRAINT [FK_TaxTemplateDetail_UnitOfMeasure]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping constraints from [APPS].[Employee]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Employee] DROP CONSTRAINT [PK_Employee]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping constraints from [APPS].[UnitOfMeasure]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[UnitOfMeasure] DROP CONSTRAINT [PK_UOM]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping index [CX_Employee] from [APPS].[Employee]''
+');
+
+GO
+EXECUTE ('DROP INDEX [CX_Employee] ON [APPS].[Employee]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping index [CX_UnitOfMeasure] from [APPS].[UnitOfMeasure]''
+');
+
+GO
+EXECUTE ('DROP INDEX [CX_UnitOfMeasure] ON [APPS].[UnitOfMeasure]
+');
+
+GO
+EXECUTE ('PRINT N''Altering [APPS].[BusinessGroup]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[BusinessGroup] ADD
+[Description] [nvarchar] (500) NULL
+');
+
+GO
+EXECUTE ('PRINT N''Altering [APPS].[Bank]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Bank] ADD
+[Description] [nvarchar] (500) NULL
+');
+
+GO
+EXECUTE ('PRINT N''Altering [APPS].[Currency]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Currency] ADD
+[Description] [nvarchar] (500) NULL
+');
+
+GO
+EXECUTE ('PRINT N''Altering [APPS].[Customer]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Customer] ADD
+[Address] [nvarchar] (500) NULL,
+[TaxCode] [nvarchar] (100) NULL,
+[Description] [nvarchar] (500) NULL
+');
+
+GO
+EXECUTE ('PRINT N''Creating [dbo].[CustomerReceiver]''
+');
+
+GO
+EXECUTE ('CREATE TABLE [dbo].[CustomerReceiver]
 (
-[id] [uniqueidentifier] NOT NULL
+[Id] [uniqueidentifier] NOT NULL,
+[CX] [bigint] NOT NULL IDENTITY(1, 1),
+[Name] [nvarchar] (100) NOT NULL,
+[Email] [nvarchar] (100) NULL,
+[Phone] [nvarchar] (20) NOT NULL,
+[Address] [nvarchar] (500) NULL,
+[CustomerId] [uniqueidentifier] NOT NULL
 )
 ');
 
 GO
-EXECUTE ('PRINT N''Creating primary key [PK_Table_1] on [dbo].[Table_1]''
+EXECUTE ('PRINT N''Creating primary key [PK_CustomerReceiver] on [dbo].[CustomerReceiver]''
 ');
 
 GO
-EXECUTE ('ALTER TABLE [dbo].[Table_1] ADD CONSTRAINT [PK_Table_1] PRIMARY KEY CLUSTERED  ([id])
+EXECUTE ('ALTER TABLE [dbo].[CustomerReceiver] ADD CONSTRAINT [PK_CustomerReceiver] PRIMARY KEY CLUSTERED  ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Creating [APPS].[CustomerBankAccount]''
+');
+
+GO
+EXECUTE ('CREATE TABLE [APPS].[CustomerBankAccount]
+(
+[Id] [uniqueidentifier] NOT NULL,
+[CX] [bigint] NOT NULL IDENTITY(1, 1),
+[Name] [nchar] (10) NOT NULL,
+[CustomerId] [uniqueidentifier] NOT NULL,
+[BankId] [uniqueidentifier] NOT NULL,
+[BankAccountName] [nvarchar] (50) NULL,
+[Branch] [nvarchar] (500) NULL,
+[ProvinceId] [uniqueidentifier] NOT NULL
+)
+');
+
+GO
+EXECUTE ('PRINT N''Creating primary key [PK_CustomerBankAccount] on [APPS].[CustomerBankAccount]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerBankAccount] ADD CONSTRAINT [PK_CustomerBankAccount] PRIMARY KEY CLUSTERED  ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Creating [APPS].[Province]''
+');
+
+GO
+EXECUTE ('CREATE TABLE [APPS].[Province]
+(
+[Id] [uniqueidentifier] NOT NULL,
+[Name] [nvarchar] (100) NULL,
+[CX] [bigint] NOT NULL IDENTITY(1, 1)
+)
+');
+
+GO
+EXECUTE ('PRINT N''Creating primary key [PK_Province] on [APPS].[Province]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Province] ADD CONSTRAINT [PK_Province] PRIMARY KEY CLUSTERED  ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Creating [APPS].[CustomerContact]''
+');
+
+GO
+EXECUTE ('CREATE TABLE [APPS].[CustomerContact]
+(
+[Id] [uniqueidentifier] NOT NULL,
+[CustomerId] [uniqueidentifier] NOT NULL,
+[CX] [bigint] NOT NULL IDENTITY(1, 1),
+[Phone] [nvarchar] (20) NOT NULL,
+[Email] [nvarchar] (100) NULL,
+[Address] [nvarchar] (500) NULL,
+[Name] [nvarchar] (500) NOT NULL
+)
+');
+
+GO
+EXECUTE ('PRINT N''Creating primary key [PK_CustomerContact] on [APPS].[CustomerContact]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerContact] ADD CONSTRAINT [PK_CustomerContact] PRIMARY KEY CLUSTERED  ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Rebuilding [APPS].[Employee]''
+');
+
+GO
+EXECUTE ('CREATE TABLE [APPS].[RG_Recovery_1_Employee]
+(
+[Id] [uniqueidentifier] NOT NULL,
+[CX] [bigint] NOT NULL IDENTITY(1, 1),
+[Code] [nchar] (5) NOT NULL,
+[DisplayName] [nvarchar] (100) NOT NULL,
+[PrimaryEmail] [nvarchar] (500) NULL,
+[AlternativeEmail] [nvarchar] (500) NULL,
+[BusinessGroupId] [uniqueidentifier] NOT NULL,
+[JobTitleId] [uniqueidentifier] NOT NULL,
+[JobLevelId] [uniqueidentifier] NOT NULL,
+[JoinDate] [date] NOT NULL,
+[EffectiveDate] [date] NULL,
+[EndDate] [date] NULL,
+[Status] [int] NOT NULL,
+[Disable] [bit] NOT NULL,
+[Gender] [bit] NOT NULL,
+[IdNumber] [nvarchar] (20) NULL,
+[IssueDate] [date] NULL,
+[IssueLocation] [nvarchar] (100) NULL,
+[TaxCode] [nvarchar] (100) NULL,
+[Salary] [bigint] NULL,
+[SalaryFactor] [float] NULL,
+[InsuranceSalary] [bigint] NULL,
+[NoDependentPerson] [int] NULL,
+[BankId] [uniqueidentifier] NULL,
+[BankAccount] [nvarchar] (50) NULL,
+[BankAccountName] [nvarchar] (50) NULL,
+[BankBranch] [nvarchar] (50) NULL,
+[BankAddress] [nvarchar] (50) NULL,
+[Phone] [nvarchar] (20) NULL,
+[ProvinceId] [uniqueidentifier] NULL,
+[Description] [nvarchar] (500) NULL
+)
+');
+
+GO
+SET IDENTITY_INSERT [APPS].[RG_Recovery_1_Employee] ON
+
+GO
+EXECUTE ('INSERT INTO [APPS].[RG_Recovery_1_Employee]([Id], [CX], [Code], [DisplayName], [PrimaryEmail], [AlternativeEmail], [BusinessGroupId], [JobTitleId], [JobLevelId], [JoinDate], [EffectiveDate], [EndDate], [Status], [Disable]) SELECT [Id], [CX], [Code], [DisplayName], [PrimaryEmail], [AlternativeEmail], [BusinessGroupId], [JobTitleId], [JobLevelId], [JoinDate], [EffectiveDate], [EndDate], [Status], [Disable] FROM [APPS].[Employee]
+');
+
+GO
+SET IDENTITY_INSERT [APPS].[RG_Recovery_1_Employee] OFF
+
+GO
+EXECUTE ('DECLARE @idVal BIGINT
+SELECT @idVal = IDENT_CURRENT(N''[APPS].[Employee]'')
+IF @idVal IS NOT NULL
+    DBCC CHECKIDENT(N''[APPS].[RG_Recovery_1_Employee]'', RESEED, @idVal)
+');
+
+GO
+EXECUTE ('DROP TABLE [APPS].[Employee]
+');
+
+GO
+EXECUTE ('EXEC sp_rename N''[APPS].[RG_Recovery_1_Employee]'', N''Employee'', N''OBJECT''
+');
+
+GO
+EXECUTE ('PRINT N''Creating index [CX_Employee] on [APPS].[Employee]''
+');
+
+GO
+EXECUTE ('CREATE UNIQUE CLUSTERED INDEX [CX_Employee] ON [APPS].[Employee] ([CX])
+');
+
+GO
+EXECUTE ('PRINT N''Creating primary key [PK_Employee] on [APPS].[Employee]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Employee] ADD CONSTRAINT [PK_Employee] PRIMARY KEY NONCLUSTERED  ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Altering [APPS].[JobLevel]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[JobLevel] ADD
+[Description] [nvarchar] (500) NULL
+');
+
+GO
+EXECUTE ('PRINT N''Altering [APPS].[JobTitle]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[JobTitle] ADD
+[Description] [nvarchar] (500) NULL
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[JobTitle] ALTER COLUMN [Code] [nvarchar] (50) NOT NULL
+');
+
+GO
+EXECUTE ('PRINT N''Creating [APPS].[EmployeeContact]''
+');
+
+GO
+EXECUTE ('CREATE TABLE [APPS].[EmployeeContact]
+(
+[Id] [uniqueidentifier] NOT NULL,
+[EmployeeId] [uniqueidentifier] NOT NULL,
+[CX] [bigint] NOT NULL IDENTITY(1, 1),
+[Name] [nvarchar] (50) NOT NULL,
+[Email] [nvarchar] (50) NULL,
+[Phone] [nvarchar] (50) NOT NULL,
+[Address] [nvarchar] (500) NULL
+)
+');
+
+GO
+EXECUTE ('PRINT N''Creating primary key [PK_EmployeeContact] on [APPS].[EmployeeContact]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[EmployeeContact] ADD CONSTRAINT [PK_EmployeeContact] PRIMARY KEY CLUSTERED  ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Rebuilding [APPS].[UnitOfMeasure]''
+');
+
+GO
+EXECUTE ('CREATE TABLE [APPS].[RG_Recovery_2_UnitOfMeasure]
+(
+[Id] [uniqueidentifier] NOT NULL,
+[Name] [nvarchar] (50) NOT NULL,
+[Type] [nvarchar] (50) NOT NULL,
+[BusinessGroupId] [uniqueidentifier] NOT NULL,
+[CX] [bigint] NOT NULL IDENTITY(1, 1),
+[Disable] [bit] NOT NULL,
+[Code] [nvarchar] (10) NOT NULL,
+[Description] [nvarchar] (500) NULL
+)
+');
+
+GO
+SET IDENTITY_INSERT [APPS].[RG_Recovery_2_UnitOfMeasure] ON
+
+GO
+EXECUTE ('INSERT INTO [APPS].[RG_Recovery_2_UnitOfMeasure]([Id], [Name], [Type], [BusinessGroupId], [CX], [Disable]) SELECT [Id], [Name], [Type], [BusinessGroupId], [CX], [Disable] FROM [APPS].[UnitOfMeasure]
+');
+
+GO
+SET IDENTITY_INSERT [APPS].[RG_Recovery_2_UnitOfMeasure] OFF
+
+GO
+EXECUTE ('DECLARE @idVal BIGINT
+SELECT @idVal = IDENT_CURRENT(N''[APPS].[UnitOfMeasure]'')
+IF @idVal IS NOT NULL
+    DBCC CHECKIDENT(N''[APPS].[RG_Recovery_2_UnitOfMeasure]'', RESEED, @idVal)
+');
+
+GO
+EXECUTE ('DROP TABLE [APPS].[UnitOfMeasure]
+');
+
+GO
+EXECUTE ('EXEC sp_rename N''[APPS].[RG_Recovery_2_UnitOfMeasure]'', N''UnitOfMeasure'', N''OBJECT''
+');
+
+GO
+EXECUTE ('PRINT N''Creating index [CX_UnitOfMeasure] on [APPS].[UnitOfMeasure]''
+');
+
+GO
+EXECUTE ('CREATE UNIQUE CLUSTERED INDEX [CX_UnitOfMeasure] ON [APPS].[UnitOfMeasure] ([CX])
+');
+
+GO
+EXECUTE ('PRINT N''Creating primary key [PK_UOM] on [APPS].[UnitOfMeasure]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[UnitOfMeasure] ADD CONSTRAINT [PK_UOM] PRIMARY KEY NONCLUSTERED  ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[Employee]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Employee] ADD CONSTRAINT [FK_Employee_BusinessGroup] FOREIGN KEY ([BusinessGroupId]) REFERENCES [APPS].[BusinessGroup] ([Id])
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Employee] ADD CONSTRAINT [FK_Employee_JobLevel] FOREIGN KEY ([JobLevelId]) REFERENCES [APPS].[JobLevel] ([Id])
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Employee] ADD CONSTRAINT [FK_Employee_JobTitle] FOREIGN KEY ([JobTitleId]) REFERENCES [APPS].[JobTitle] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[UnitOfMeasure]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[UnitOfMeasure] ADD CONSTRAINT [FK_UnitOfMeasure_BusinessGroup] FOREIGN KEY ([BusinessGroupId]) REFERENCES [APPS].[BusinessGroup] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[CustomerBankAccount]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerBankAccount] ADD CONSTRAINT [FK_CustomerBankAccount_Customer] FOREIGN KEY ([CustomerId]) REFERENCES [APPS].[Customer] ([Id])
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerBankAccount] ADD CONSTRAINT [FK_CustomerBankAccount_Province] FOREIGN KEY ([ProvinceId]) REFERENCES [APPS].[Province] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[CustomerContact]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerContact] ADD CONSTRAINT [FK_CustomerContact_Customer] FOREIGN KEY ([CustomerId]) REFERENCES [APPS].[Customer] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[Customer]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Customer] ADD CONSTRAINT [FK_Customer_BusinessGroup] FOREIGN KEY ([BusinessGroupId]) REFERENCES [APPS].[BusinessGroup] ([Id])
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Customer] ADD CONSTRAINT [FK_Customer_CustomerReceiver] FOREIGN KEY ([Id]) REFERENCES [dbo].[CustomerReceiver] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[EmployeeContact]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[EmployeeContact] ADD CONSTRAINT [FK_EmployeeContact_Employee] FOREIGN KEY ([EmployeeId]) REFERENCES [APPS].[Employee] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[Employee]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Employee] ADD CONSTRAINT [FK_Employee_Bank] FOREIGN KEY ([BankId]) REFERENCES [APPS].[Bank] ([Id])
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Employee] ADD CONSTRAINT [FK_Employee_Province] FOREIGN KEY ([ProvinceId]) REFERENCES [APPS].[Province] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [HR].[EmployeePosition]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [HR].[EmployeePosition] ADD CONSTRAINT [FK_EmployeeGroup_Employee] FOREIGN KEY ([EmployeeId]) REFERENCES [APPS].[Employee] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [HR].[JobHistory]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [HR].[JobHistory] ADD CONSTRAINT [FK_JobHistory_Employee] FOREIGN KEY ([EmployeeId]) REFERENCES [APPS].[Employee] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [dbo].[StockAdjustment]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [dbo].[StockAdjustment] ADD CONSTRAINT [FK_StockAdjustment_Employee] FOREIGN KEY ([RequesterId]) REFERENCES [APPS].[Employee] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [dbo].[StockRequest]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [dbo].[StockRequest] ADD CONSTRAINT [FK_StockRequest_Employee] FOREIGN KEY ([RequesterId]) REFERENCES [APPS].[Employee] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPSYS].[User]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPSYS].[User] ADD CONSTRAINT [FK_User_Employee] FOREIGN KEY ([EmployeeId]) REFERENCES [APPS].[Employee] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [dbo].[StockRequestDetail]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [dbo].[StockRequestDetail] ADD CONSTRAINT [FK_StockRequestDetail_UnitOfMeasure] FOREIGN KEY ([UnitOfMeasureId]) REFERENCES [APPS].[UnitOfMeasure] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[Tax]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Tax] ADD CONSTRAINT [FK_Tax_UnitOfMeasure] FOREIGN KEY ([UnitOfMeasureId]) REFERENCES [APPS].[UnitOfMeasure] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[TaxTemplateDetail]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[TaxTemplateDetail] ADD CONSTRAINT [FK_TaxTemplateDetail_UnitOfMeasure] FOREIGN KEY ([UnitOfMeasureId]) REFERENCES [APPS].[UnitOfMeasure] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Creating extended properties''
+');
+
+GO
+EXECUTE ('EXEC sp_addextendedproperty N''MS_Description'', N''Bank Account of employee'', ''SCHEMA'', N''APPS'', ''TABLE'', N''Employee'', ''COLUMN'', N''BankAccount''
 ');
 
 GO
@@ -6934,14 +7504,774 @@ IF N'$(IsSqlCmdEnabled)' <> N'True'
   SET NOEXEC ON;
 
 GO
-IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('b0192e9b-1d8b-4929-813b-961fa2f82463' AS UNIQUEIDENTIFIER))
-  PRINT '***** FINISHED EXECUTING MIGRATION "Migrations\014_20190713-1805_PC.sql", ID: {b0192e9b-1d8b-4929-813b-961fa2f82463} *****
+IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('04cd6b05-ee50-4ad6-859d-8f43f6a858bc' AS UNIQUEIDENTIFIER))
+  PRINT '***** FINISHED EXECUTING MIGRATION "Migrations\014_20190713-1813_PC.sql", ID: {04cd6b05-ee50-4ad6-859d-8f43f6a858bc} *****
 ';
 
 GO
-IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('b0192e9b-1d8b-4929-813b-961fa2f82463' AS UNIQUEIDENTIFIER))
+IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('04cd6b05-ee50-4ad6-859d-8f43f6a858bc' AS UNIQUEIDENTIFIER))
   INSERT [$(DatabaseName)].[dbo].[__MigrationLog] ([migration_id], [script_checksum], [script_filename], [complete_dt], [applied_by], [deployed], [version], [package_version], [release_version])
-  VALUES                                         (CAST ('b0192e9b-1d8b-4929-813b-961fa2f82463' AS UNIQUEIDENTIFIER), '71C44A2EDF5312C94B442387CC2B29EB2C57A7BFE05043B3274F9C584035732E', 'Migrations\014_20190713-1805_PC.sql', SYSDATETIME(), SYSTEM_USER, 1, NULL, '$(PackageVersion)', CASE '$(ReleaseVersion)' WHEN '' THEN NULL ELSE '$(ReleaseVersion)' END);
+  VALUES                                         (CAST ('04cd6b05-ee50-4ad6-859d-8f43f6a858bc' AS UNIQUEIDENTIFIER), '6F3FBD61726E9A05579DC210CB0DFA8454BD0079FAA20F626197B6EF63DBFE9A', 'Migrations\014_20190713-1813_PC.sql', SYSDATETIME(), SYSTEM_USER, 1, NULL, '$(PackageVersion)', CASE '$(ReleaseVersion)' WHEN '' THEN NULL ELSE '$(ReleaseVersion)' END);
+
+GO
+SET IMPLICIT_TRANSACTIONS, NUMERIC_ROUNDABORT OFF;
+SET ANSI_NULLS, ANSI_PADDING, ANSI_WARNINGS, ARITHABORT, CONCAT_NULL_YIELDS_NULL, NOCOUNT, QUOTED_IDENTIFIER ON;
+
+GO
+IF DB_NAME() != '$(DatabaseName)'
+  USE [$(DatabaseName)];
+
+GO
+IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('c96c86b3-bfe6-4929-9f40-5036ed8ee391' AS UNIQUEIDENTIFIER))
+  PRINT '
+
+***** EXECUTING MIGRATION "Migrations\015_20190715-0953_PC.sql", ID: {c96c86b3-bfe6-4929-9f40-5036ed8ee391} *****';
+
+GO
+IF EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('c96c86b3-bfe6-4929-9f40-5036ed8ee391' AS UNIQUEIDENTIFIER))
+BEGIN
+  PRINT '----- Skipping "Migrations\015_20190715-0953_PC.sql", ID: {c96c86b3-bfe6-4929-9f40-5036ed8ee391} as it has already been run on this database';
+  SET NOEXEC ON;
+END
+
+GO
+EXECUTE ('
+PRINT N''Dropping foreign keys from [APPS].[Customer]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Customer] DROP CONSTRAINT [FK_Customer_CustomerReceiver]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping constraints from [dbo].[CustomerReceiver]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [dbo].[CustomerReceiver] DROP CONSTRAINT [PK_CustomerReceiver]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping [dbo].[CustomerReceiver]''
+');
+
+GO
+EXECUTE ('DROP TABLE [dbo].[CustomerReceiver]
+');
+
+GO
+EXECUTE ('PRINT N''Creating [APPS].[CustomerReceiver]''
+');
+
+GO
+EXECUTE ('CREATE TABLE [APPS].[CustomerReceiver]
+(
+[Id] [uniqueidentifier] NOT NULL,
+[CX] [bigint] NOT NULL IDENTITY(1, 1),
+[Name] [nvarchar] (100) NOT NULL,
+[Email] [nvarchar] (100) NULL,
+[Phone] [nvarchar] (20) NOT NULL,
+[Address] [nvarchar] (500) NULL,
+[CustomerId] [uniqueidentifier] NOT NULL
+)
+');
+
+GO
+EXECUTE ('PRINT N''Creating primary key [PK_CustomerReceiver] on [APPS].[CustomerReceiver]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerReceiver] ADD CONSTRAINT [PK_CustomerReceiver] PRIMARY KEY CLUSTERED  ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[Customer]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Customer] ADD CONSTRAINT [FK_Customer_CustomerReceiver] FOREIGN KEY ([Id]) REFERENCES [APPS].[CustomerReceiver] ([Id])
+');
+
+GO
+SET NOEXEC OFF;
+
+GO
+IF N'$(IsSqlCmdEnabled)' <> N'True'
+  SET NOEXEC ON;
+
+GO
+IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('c96c86b3-bfe6-4929-9f40-5036ed8ee391' AS UNIQUEIDENTIFIER))
+  PRINT '***** FINISHED EXECUTING MIGRATION "Migrations\015_20190715-0953_PC.sql", ID: {c96c86b3-bfe6-4929-9f40-5036ed8ee391} *****
+';
+
+GO
+IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('c96c86b3-bfe6-4929-9f40-5036ed8ee391' AS UNIQUEIDENTIFIER))
+  INSERT [$(DatabaseName)].[dbo].[__MigrationLog] ([migration_id], [script_checksum], [script_filename], [complete_dt], [applied_by], [deployed], [version], [package_version], [release_version])
+  VALUES                                         (CAST ('c96c86b3-bfe6-4929-9f40-5036ed8ee391' AS UNIQUEIDENTIFIER), '602D22EBB76274376185118F89600609F53019DD9C38D47A5B950D452CEB4130', 'Migrations\015_20190715-0953_PC.sql', SYSDATETIME(), SYSTEM_USER, 1, NULL, '$(PackageVersion)', CASE '$(ReleaseVersion)' WHEN '' THEN NULL ELSE '$(ReleaseVersion)' END);
+
+GO
+SET IMPLICIT_TRANSACTIONS, NUMERIC_ROUNDABORT OFF;
+SET ANSI_NULLS, ANSI_PADDING, ANSI_WARNINGS, ARITHABORT, CONCAT_NULL_YIELDS_NULL, NOCOUNT, QUOTED_IDENTIFIER ON;
+
+GO
+IF DB_NAME() != '$(DatabaseName)'
+  USE [$(DatabaseName)];
+
+GO
+IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('a3421d16-1bd4-4efd-abd6-392706be463b' AS UNIQUEIDENTIFIER))
+  PRINT '
+
+***** EXECUTING MIGRATION "Migrations\016_20190715-1040_PC.sql", ID: {a3421d16-1bd4-4efd-abd6-392706be463b} *****';
+
+GO
+IF EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('a3421d16-1bd4-4efd-abd6-392706be463b' AS UNIQUEIDENTIFIER))
+BEGIN
+  PRINT '----- Skipping "Migrations\016_20190715-1040_PC.sql", ID: {a3421d16-1bd4-4efd-abd6-392706be463b} as it has already been run on this database';
+  SET NOEXEC ON;
+END
+
+GO
+EXECUTE ('
+PRINT N''Dropping foreign keys from [APPS].[CustomerBankAccount]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerBankAccount] DROP CONSTRAINT [FK_CustomerBankAccount_Customer]
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerBankAccount] DROP CONSTRAINT [FK_CustomerBankAccount_Province]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping foreign keys from [APPS].[Customer]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Customer] DROP CONSTRAINT [FK_Customer_BusinessGroup]
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Customer] DROP CONSTRAINT [FK_Customer_CustomerReceiver]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping foreign keys from [APPS].[CustomerContact]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerContact] DROP CONSTRAINT [FK_CustomerContact_Customer]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping constraints from [APPS].[CustomerBankAccount]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerBankAccount] DROP CONSTRAINT [PK_CustomerBankAccount]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping constraints from [APPS].[Customer]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Customer] DROP CONSTRAINT [PK_Customer]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping constraints from [APPS].[Supplier]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Supplier] DROP CONSTRAINT [PK_Supplier]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping index [CX_Supplier] from [APPS].[Supplier]''
+');
+
+GO
+EXECUTE ('DROP INDEX [CX_Supplier] ON [APPS].[Supplier]
+');
+
+GO
+EXECUTE ('PRINT N''Rebuilding [APPS].[Customer]''
+');
+
+GO
+EXECUTE ('CREATE TABLE [APPS].[RG_Recovery_1_Customer]
+(
+[Id] [uniqueidentifier] NOT NULL,
+[BusinessGroupId] [uniqueidentifier] NOT NULL,
+[CX] [bigint] NOT NULL IDENTITY(1, 1),
+[Disable] [bit] NOT NULL,
+[Code] [nvarchar] (50) NOT NULL,
+[Name] [nvarchar] (500) NOT NULL,
+[Address] [nvarchar] (500) NULL,
+[TaxCode] [nvarchar] (100) NULL,
+[Description] [nvarchar] (500) NULL,
+[Status] [int] NOT NULL
+)
+');
+
+GO
+SET IDENTITY_INSERT [APPS].[RG_Recovery_1_Customer] ON
+
+GO
+EXECUTE ('INSERT INTO [APPS].[RG_Recovery_1_Customer]([Id], [BusinessGroupId], [CX], [Disable], [Code], [Name], [Address], [TaxCode], [Description]) SELECT [Id], [BusinessGroupId], [CX], [Disable], [Code], [Name], [Address], [TaxCode], [Description] FROM [APPS].[Customer]
+');
+
+GO
+SET IDENTITY_INSERT [APPS].[RG_Recovery_1_Customer] OFF
+
+GO
+EXECUTE ('DECLARE @idVal BIGINT
+SELECT @idVal = IDENT_CURRENT(N''[APPS].[Customer]'')
+IF @idVal IS NOT NULL
+    DBCC CHECKIDENT(N''[APPS].[RG_Recovery_1_Customer]'', RESEED, @idVal)
+');
+
+GO
+EXECUTE ('DROP TABLE [APPS].[Customer]
+');
+
+GO
+EXECUTE ('EXEC sp_rename N''[APPS].[RG_Recovery_1_Customer]'', N''Customer'', N''OBJECT''
+');
+
+GO
+EXECUTE ('PRINT N''Creating primary key [PK_Customer] on [APPS].[Customer]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Customer] ADD CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED  ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Rebuilding [APPS].[CustomerBankAccount]''
+');
+
+GO
+EXECUTE ('CREATE TABLE [APPS].[RG_Recovery_2_CustomerBankAccount]
+(
+[Id] [uniqueidentifier] NOT NULL,
+[CX] [bigint] NOT NULL IDENTITY(1, 1),
+[Name] [nvarchar] (100) NOT NULL,
+[CustomerId] [uniqueidentifier] NOT NULL,
+[BankId] [uniqueidentifier] NOT NULL,
+[BankAccountName] [nvarchar] (50) NOT NULL,
+[BankBranch] [nvarchar] (500) NOT NULL,
+[ProvinceId] [uniqueidentifier] NOT NULL
+)
+');
+
+GO
+SET IDENTITY_INSERT [APPS].[RG_Recovery_2_CustomerBankAccount] ON
+
+GO
+EXECUTE ('INSERT INTO [APPS].[RG_Recovery_2_CustomerBankAccount]([Id], [CX], [Name], [CustomerId], [BankId], [BankAccountName], [ProvinceId]) SELECT [Id], [CX], [Name], [CustomerId], [BankId], [BankAccountName], [ProvinceId] FROM [APPS].[CustomerBankAccount]
+');
+
+GO
+SET IDENTITY_INSERT [APPS].[RG_Recovery_2_CustomerBankAccount] OFF
+
+GO
+EXECUTE ('DECLARE @idVal BIGINT
+SELECT @idVal = IDENT_CURRENT(N''[APPS].[CustomerBankAccount]'')
+IF @idVal IS NOT NULL
+    DBCC CHECKIDENT(N''[APPS].[RG_Recovery_2_CustomerBankAccount]'', RESEED, @idVal)
+');
+
+GO
+EXECUTE ('DROP TABLE [APPS].[CustomerBankAccount]
+');
+
+GO
+EXECUTE ('EXEC sp_rename N''[APPS].[RG_Recovery_2_CustomerBankAccount]'', N''CustomerBankAccount'', N''OBJECT''
+');
+
+GO
+EXECUTE ('PRINT N''Creating primary key [PK_CustomerBankAccount] on [APPS].[CustomerBankAccount]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerBankAccount] ADD CONSTRAINT [PK_CustomerBankAccount] PRIMARY KEY CLUSTERED  ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Rebuilding [APPS].[Supplier]''
+');
+
+GO
+EXECUTE ('CREATE TABLE [APPS].[RG_Recovery_3_Supplier]
+(
+[Id] [uniqueidentifier] NOT NULL,
+[TaxCode] [nvarchar] (50) NULL,
+[Name] [nvarchar] (500) NULL,
+[BusinessGroupId] [uniqueidentifier] NOT NULL,
+[CX] [bigint] NOT NULL IDENTITY(1, 1),
+[Status] [int] NOT NULL,
+[Address] [nvarchar] (500) NULL,
+[Description] [nvarchar] (500) NULL,
+[Disable] [bit] NOT NULL,
+[Code] [nvarchar] (50) NOT NULL
+)
+');
+
+GO
+SET IDENTITY_INSERT [APPS].[RG_Recovery_3_Supplier] ON
+
+GO
+EXECUTE ('INSERT INTO [APPS].[RG_Recovery_3_Supplier]([Id], [TaxCode], [Name], [BusinessGroupId], [CX]) SELECT [Id], [TaxCode], [Name], [BusinessGroupId], [CX] FROM [APPS].[Supplier]
+');
+
+GO
+SET IDENTITY_INSERT [APPS].[RG_Recovery_3_Supplier] OFF
+
+GO
+EXECUTE ('DECLARE @idVal BIGINT
+SELECT @idVal = IDENT_CURRENT(N''[APPS].[Supplier]'')
+IF @idVal IS NOT NULL
+    DBCC CHECKIDENT(N''[APPS].[RG_Recovery_3_Supplier]'', RESEED, @idVal)
+');
+
+GO
+EXECUTE ('DROP TABLE [APPS].[Supplier]
+');
+
+GO
+EXECUTE ('EXEC sp_rename N''[APPS].[RG_Recovery_3_Supplier]'', N''Supplier'', N''OBJECT''
+');
+
+GO
+EXECUTE ('PRINT N''Creating index [CX_Supplier] on [APPS].[Supplier]''
+');
+
+GO
+EXECUTE ('CREATE UNIQUE CLUSTERED INDEX [CX_Supplier] ON [APPS].[Supplier] ([CX])
+');
+
+GO
+EXECUTE ('PRINT N''Creating primary key [PK_Supplier] on [APPS].[Supplier]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Supplier] ADD CONSTRAINT [PK_Supplier] PRIMARY KEY NONCLUSTERED  ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Creating [APPS].[SupplierBankAccount]''
+');
+
+GO
+EXECUTE ('CREATE TABLE [APPS].[SupplierBankAccount]
+(
+[Id] [uniqueidentifier] NOT NULL,
+[SupplierId] [uniqueidentifier] NOT NULL,
+[CX] [bigint] NOT NULL IDENTITY(1, 1),
+[Name] [nvarchar] (100) NOT NULL,
+[BankId] [uniqueidentifier] NOT NULL,
+[BankAccountName] [nvarchar] (20) NOT NULL,
+[BankBranch] [nvarchar] (100) NOT NULL,
+[ProvinceId] [uniqueidentifier] NOT NULL
+)
+');
+
+GO
+EXECUTE ('PRINT N''Creating primary key [PK_SupplierBankAccount] on [APPS].[SupplierBankAccount]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[SupplierBankAccount] ADD CONSTRAINT [PK_SupplierBankAccount] PRIMARY KEY CLUSTERED  ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Creating [APPS].[SupplierContact]''
+');
+
+GO
+EXECUTE ('CREATE TABLE [APPS].[SupplierContact]
+(
+[Id] [uniqueidentifier] NOT NULL,
+[SupplierId] [uniqueidentifier] NOT NULL,
+[CX] [bigint] NOT NULL IDENTITY(1, 1),
+[Phone] [nvarchar] (20) NOT NULL,
+[Email] [nvarchar] (100) NULL,
+[Address] [nvarchar] (500) NULL,
+[Name] [nvarchar] (500) NOT NULL
+)
+');
+
+GO
+EXECUTE ('PRINT N''Creating primary key [PK_SupplierContact] on [APPS].[SupplierContact]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[SupplierContact] ADD CONSTRAINT [PK_SupplierContact] PRIMARY KEY CLUSTERED  ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Creating [APPS].[SupplierReceiver]''
+');
+
+GO
+EXECUTE ('CREATE TABLE [APPS].[SupplierReceiver]
+(
+[Id] [uniqueidentifier] NOT NULL,
+[SupplierId] [uniqueidentifier] NOT NULL,
+[CX] [bigint] NOT NULL IDENTITY(1, 1),
+[Name] [nchar] (10) NOT NULL,
+[Email] [nvarchar] (100) NULL,
+[Phone] [nvarchar] (20) NOT NULL,
+[Address] [nvarchar] (500) NULL
+)
+');
+
+GO
+EXECUTE ('PRINT N''Creating primary key [PK_SupplierReceiver] on [APPS].[SupplierReceiver]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[SupplierReceiver] ADD CONSTRAINT [PK_SupplierReceiver] PRIMARY KEY CLUSTERED  ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[CustomerBankAccount]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerBankAccount] ADD CONSTRAINT [FK_CustomerBankAccount_Bank] FOREIGN KEY ([BankId]) REFERENCES [APPS].[Bank] ([Id])
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerBankAccount] ADD CONSTRAINT [FK_CustomerBankAccount_Customer] FOREIGN KEY ([CustomerId]) REFERENCES [APPS].[Customer] ([Id])
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerBankAccount] ADD CONSTRAINT [FK_CustomerBankAccount_Province] FOREIGN KEY ([ProvinceId]) REFERENCES [APPS].[Province] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[CustomerReceiver]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerReceiver] ADD CONSTRAINT [FK_CustomerReceiver_Customer] FOREIGN KEY ([CustomerId]) REFERENCES [APPS].[Customer] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[Customer]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Customer] ADD CONSTRAINT [FK_Customer_BusinessGroup] FOREIGN KEY ([BusinessGroupId]) REFERENCES [APPS].[BusinessGroup] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[SupplierBankAccount]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[SupplierBankAccount] ADD CONSTRAINT [FK_SupplierBankAccount_Supplier] FOREIGN KEY ([SupplierId]) REFERENCES [APPS].[Supplier] ([Id])
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[SupplierBankAccount] ADD CONSTRAINT [FK_SupplierBankAccount_Bank] FOREIGN KEY ([BankId]) REFERENCES [APPS].[Bank] ([Id])
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[SupplierBankAccount] ADD CONSTRAINT [FK_SupplierBankAccount_Province] FOREIGN KEY ([ProvinceId]) REFERENCES [APPS].[Province] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[SupplierContact]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[SupplierContact] ADD CONSTRAINT [FK_SupplierContact_Supplier] FOREIGN KEY ([SupplierId]) REFERENCES [APPS].[Supplier] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[SupplierReceiver]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[SupplierReceiver] ADD CONSTRAINT [FK_SupplierReceiver_Supplier] FOREIGN KEY ([SupplierId]) REFERENCES [APPS].[Supplier] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[Supplier]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Supplier] ADD CONSTRAINT [FK_Supplier_BusinessGroup] FOREIGN KEY ([BusinessGroupId]) REFERENCES [APPS].[BusinessGroup] ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[CustomerContact]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerContact] ADD CONSTRAINT [FK_CustomerContact_Customer] FOREIGN KEY ([CustomerId]) REFERENCES [APPS].[Customer] ([Id])
+');
+
+GO
+SET NOEXEC OFF;
+
+GO
+IF N'$(IsSqlCmdEnabled)' <> N'True'
+  SET NOEXEC ON;
+
+GO
+IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('a3421d16-1bd4-4efd-abd6-392706be463b' AS UNIQUEIDENTIFIER))
+  PRINT '***** FINISHED EXECUTING MIGRATION "Migrations\016_20190715-1040_PC.sql", ID: {a3421d16-1bd4-4efd-abd6-392706be463b} *****
+';
+
+GO
+IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('a3421d16-1bd4-4efd-abd6-392706be463b' AS UNIQUEIDENTIFIER))
+  INSERT [$(DatabaseName)].[dbo].[__MigrationLog] ([migration_id], [script_checksum], [script_filename], [complete_dt], [applied_by], [deployed], [version], [package_version], [release_version])
+  VALUES                                         (CAST ('a3421d16-1bd4-4efd-abd6-392706be463b' AS UNIQUEIDENTIFIER), 'F2025D0F853C57037F02915F67AD7374D634687C33CA3FD5BA6AEDD87224DA27', 'Migrations\016_20190715-1040_PC.sql', SYSDATETIME(), SYSTEM_USER, 1, NULL, '$(PackageVersion)', CASE '$(ReleaseVersion)' WHEN '' THEN NULL ELSE '$(ReleaseVersion)' END);
+
+GO
+SET IMPLICIT_TRANSACTIONS, NUMERIC_ROUNDABORT OFF;
+SET ANSI_NULLS, ANSI_PADDING, ANSI_WARNINGS, ARITHABORT, CONCAT_NULL_YIELDS_NULL, NOCOUNT, QUOTED_IDENTIFIER ON;
+
+GO
+IF DB_NAME() != '$(DatabaseName)'
+  USE [$(DatabaseName)];
+
+GO
+IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('0fed7890-40a1-4edb-9f64-dce7d5a991df' AS UNIQUEIDENTIFIER))
+  PRINT '
+
+***** EXECUTING MIGRATION "Migrations\017_20190715-1107_PC.sql", ID: {0fed7890-40a1-4edb-9f64-dce7d5a991df} *****';
+
+GO
+IF EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('0fed7890-40a1-4edb-9f64-dce7d5a991df' AS UNIQUEIDENTIFIER))
+BEGIN
+  PRINT '----- Skipping "Migrations\017_20190715-1107_PC.sql", ID: {0fed7890-40a1-4edb-9f64-dce7d5a991df} as it has already been run on this database';
+  SET NOEXEC ON;
+END
+
+GO
+EXECUTE ('
+PRINT N''Dropping foreign keys from [APPS].[CustomerReceiver]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerReceiver] DROP CONSTRAINT [FK_CustomerReceiver_Customer]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping foreign keys from [APPS].[SupplierReceiver]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[SupplierReceiver] DROP CONSTRAINT [FK_SupplierReceiver_Supplier]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping constraints from [APPS].[CustomerReceiver]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerReceiver] DROP CONSTRAINT [PK_CustomerReceiver]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping constraints from [APPS].[SupplierReceiver]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[SupplierReceiver] DROP CONSTRAINT [PK_SupplierReceiver]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping [APPS].[SupplierReceiver]''
+');
+
+GO
+EXECUTE ('DROP TABLE [APPS].[SupplierReceiver]
+');
+
+GO
+EXECUTE ('PRINT N''Dropping [APPS].[CustomerReceiver]''
+');
+
+GO
+EXECUTE ('DROP TABLE [APPS].[CustomerReceiver]
+');
+
+GO
+EXECUTE ('PRINT N''Altering [APPS].[CustomerContact]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[CustomerContact] ADD
+[Description] [nvarchar] (500) NULL
+');
+
+GO
+EXECUTE ('PRINT N''Altering [APPS].[EmployeeContact]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[EmployeeContact] ADD
+[Description] [nvarchar] (500) NULL
+');
+
+GO
+EXECUTE ('PRINT N''Altering [APPS].[SupplierContact]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[SupplierContact] ADD
+[Description] [nvarchar] (500) NULL
+');
+
+GO
+SET NOEXEC OFF;
+
+GO
+IF N'$(IsSqlCmdEnabled)' <> N'True'
+  SET NOEXEC ON;
+
+GO
+IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('0fed7890-40a1-4edb-9f64-dce7d5a991df' AS UNIQUEIDENTIFIER))
+  PRINT '***** FINISHED EXECUTING MIGRATION "Migrations\017_20190715-1107_PC.sql", ID: {0fed7890-40a1-4edb-9f64-dce7d5a991df} *****
+';
+
+GO
+IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('0fed7890-40a1-4edb-9f64-dce7d5a991df' AS UNIQUEIDENTIFIER))
+  INSERT [$(DatabaseName)].[dbo].[__MigrationLog] ([migration_id], [script_checksum], [script_filename], [complete_dt], [applied_by], [deployed], [version], [package_version], [release_version])
+  VALUES                                         (CAST ('0fed7890-40a1-4edb-9f64-dce7d5a991df' AS UNIQUEIDENTIFIER), '63114FAB8412C4FFDFC32854C1168801EED0F9B198CDDBB56355656EF786252C', 'Migrations\017_20190715-1107_PC.sql', SYSDATETIME(), SYSTEM_USER, 1, NULL, '$(PackageVersion)', CASE '$(ReleaseVersion)' WHEN '' THEN NULL ELSE '$(ReleaseVersion)' END);
+
+GO
+SET IMPLICIT_TRANSACTIONS, NUMERIC_ROUNDABORT OFF;
+SET ANSI_NULLS, ANSI_PADDING, ANSI_WARNINGS, ARITHABORT, CONCAT_NULL_YIELDS_NULL, NOCOUNT, QUOTED_IDENTIFIER ON;
+
+GO
+IF DB_NAME() != '$(DatabaseName)'
+  USE [$(DatabaseName)];
+
+GO
+IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('a4d7bfff-e3e1-47ce-80aa-22404923ca11' AS UNIQUEIDENTIFIER))
+  PRINT '
+
+***** EXECUTING MIGRATION "Migrations\018_20190715-1152_PC.sql", ID: {a4d7bfff-e3e1-47ce-80aa-22404923ca11} *****';
+
+GO
+IF EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('a4d7bfff-e3e1-47ce-80aa-22404923ca11' AS UNIQUEIDENTIFIER))
+BEGIN
+  PRINT '----- Skipping "Migrations\018_20190715-1152_PC.sql", ID: {a4d7bfff-e3e1-47ce-80aa-22404923ca11} as it has already been run on this database';
+  SET NOEXEC ON;
+END
+
+GO
+EXECUTE ('
+PRINT N''Creating [APPS].[Voucher]''
+');
+
+GO
+EXECUTE ('CREATE TABLE [APPS].[Voucher]
+(
+[Id] [uniqueidentifier] NOT NULL,
+[CX] [bigint] NOT NULL IDENTITY(1, 1),
+[SetOfBookId] [uniqueidentifier] NOT NULL,
+[Code] [nvarchar] (10) NOT NULL,
+[Name] [nvarchar] (200) NOT NULL,
+[Description] [nvarchar] (500) NULL,
+[DebitAccount] [uniqueidentifier] NULL,
+[CreditAccount] [uniqueidentifier] NULL,
+[VoucherTypeId] [uniqueidentifier] NULL,
+[Disable] [bit] NOT NULL
+)
+');
+
+GO
+EXECUTE ('PRINT N''Creating index [CX_Voucher] on [APPS].[Voucher]''
+');
+
+GO
+EXECUTE ('CREATE UNIQUE CLUSTERED INDEX [CX_Voucher] ON [APPS].[Voucher] ([CX])
+');
+
+GO
+EXECUTE ('PRINT N''Creating primary key [PK_Voucher] on [APPS].[Voucher]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Voucher] ADD CONSTRAINT [PK_Voucher] PRIMARY KEY NONCLUSTERED  ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Creating [APPS].[VoucherType]''
+');
+
+GO
+EXECUTE ('CREATE TABLE [APPS].[VoucherType]
+(
+[Id] [uniqueidentifier] NOT NULL,
+[CX] [bigint] NOT NULL IDENTITY(1, 1),
+[Code] [nvarchar] (10) NULL,
+[Name] [nvarchar] (100) NULL,
+[Disable] [bit] NOT NULL
+)
+');
+
+GO
+EXECUTE ('PRINT N''Creating index [CX_VoucherType] on [APPS].[VoucherType]''
+');
+
+GO
+EXECUTE ('CREATE UNIQUE CLUSTERED INDEX [CX_VoucherType] ON [APPS].[VoucherType] ([CX])
+');
+
+GO
+EXECUTE ('PRINT N''Creating primary key [PK_VoucherType] on [APPS].[VoucherType]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[VoucherType] ADD CONSTRAINT [PK_VoucherType] PRIMARY KEY NONCLUSTERED  ([Id])
+');
+
+GO
+EXECUTE ('PRINT N''Adding foreign keys to [APPS].[Voucher]''
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Voucher] ADD CONSTRAINT [FK_Voucher_VoucherType] FOREIGN KEY ([VoucherTypeId]) REFERENCES [APPS].[VoucherType] ([Id])
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Voucher] ADD CONSTRAINT [FK_Voucher_SetOfBook] FOREIGN KEY ([SetOfBookId]) REFERENCES [APPS].[SetOfBook] ([Id])
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Voucher] ADD CONSTRAINT [FK_Voucher_ChartOfAccount_Debit] FOREIGN KEY ([DebitAccount]) REFERENCES [APPS].[ChartOfAccount] ([Id])
+');
+
+GO
+EXECUTE ('ALTER TABLE [APPS].[Voucher] ADD CONSTRAINT [FK_Voucher_ChartOfAccount_Credit] FOREIGN KEY ([CreditAccount]) REFERENCES [APPS].[ChartOfAccount] ([Id])
+');
+
+GO
+SET NOEXEC OFF;
+
+GO
+IF N'$(IsSqlCmdEnabled)' <> N'True'
+  SET NOEXEC ON;
+
+GO
+IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('a4d7bfff-e3e1-47ce-80aa-22404923ca11' AS UNIQUEIDENTIFIER))
+  PRINT '***** FINISHED EXECUTING MIGRATION "Migrations\018_20190715-1152_PC.sql", ID: {a4d7bfff-e3e1-47ce-80aa-22404923ca11} *****
+';
+
+GO
+IF NOT EXISTS (SELECT 1 FROM [$(DatabaseName)].[dbo].[__MigrationLogCurrent] WHERE [migration_id] = CAST ('a4d7bfff-e3e1-47ce-80aa-22404923ca11' AS UNIQUEIDENTIFIER))
+  INSERT [$(DatabaseName)].[dbo].[__MigrationLog] ([migration_id], [script_checksum], [script_filename], [complete_dt], [applied_by], [deployed], [version], [package_version], [release_version])
+  VALUES                                         (CAST ('a4d7bfff-e3e1-47ce-80aa-22404923ca11' AS UNIQUEIDENTIFIER), '5B4D01F72928410305AB9621EB18236BDD23C3C475D4CFBA381DA9F7ADB72823', 'Migrations\018_20190715-1152_PC.sql', SYSDATETIME(), SYSTEM_USER, 1, NULL, '$(PackageVersion)', CASE '$(ReleaseVersion)' WHEN '' THEN NULL ELSE '$(ReleaseVersion)' END);
 
 GO
 PRINT '# Committing transaction';

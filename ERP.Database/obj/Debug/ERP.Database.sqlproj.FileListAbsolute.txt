@@ -1,15 +1,3 @@
-C:\Users\PC\Downloads\ERP.Database\ERP.Database\bin\Debug\ERP.Database_Package.sql
-C:\Users\PC\Downloads\ERP.Database\ERP.Database\bin\Debug\ERP.Database_DeployPackage.ps1
-C:\Users\PC\Downloads\ERP.Database\ERP.Database\bin\Debug\
-C:\Users\PC\Downloads\ERP.Database\ERP.Database\bin\Debug\ERP.Database.dll
-C:\Users\PC\Downloads\ERP.Database\ERP.Database\bin\Debug\ERP.Database.pdb
-C:\Users\PC\Downloads\ERP.Database\ERP.Database\obj\Debug\ERP.Database_Package.sql
-C:\Users\PC\Downloads\ERP.Database\ERP.Database\obj\Debug\ERP.Database.dll
-C:\Users\PC\Downloads\ERP.Database\ERP.Database\obj\Debug\ERP.Database.pdb
-C:\Users\PC\Downloads\ERP.Database\ERP.Database\obj\Debug\ERP.Database.sqlprojAssemblyReference.cache
-C:\Users\PC\Downloads\ERP.Database\ERP.Database\bin\Debug\ERP.Database.sql
-C:\Users\PC\Downloads\ERP.Database\ERP.Database\obj\Debug\ERP.Database.sql
-C:\Users\PC\Downloads\ERP.Database\ERP.Database\obj\Debug\TargetedProvisioningScript.sql
 D:\ChangeAutomation-PowerShell\ERP.Database\bin\Debug\ERP.Database_Package.sql
 D:\ChangeAutomation-PowerShell\ERP.Database\bin\Debug\ERP.Database_DeployPackage.ps1
 D:\ChangeAutomation-PowerShell\ERP.Database\bin\Debug\ERP.Database_Snapshot.nupkg.bin

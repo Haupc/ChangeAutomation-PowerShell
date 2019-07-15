@@ -1,9 +1,9 @@
 # Remove Old Artifact
 
-$exportPath = ".\Artifact"
+$exportPath = "Artifact"
 
 if (Test-Path -Path $exportPath)
 {
-    Remove-Item $exportPath
+    Remove-Item $exportPath -force -recurse
 }
 mkdir $exportPath

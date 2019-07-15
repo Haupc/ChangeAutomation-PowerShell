@@ -274,6 +274,18 @@
     <None Include="Migrations\013_20190713-1004_PC.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Migrations\014_20190713-1805_PC.sql" />
+    <None Include="Migrations\014_20190713-1813_PC.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\015_20190715-0953_PC.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\016_20190715-1040_PC.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\017_20190715-1107_PC.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\018_20190715-1152_PC.sql" />
   </ItemGroup>
 </Project>

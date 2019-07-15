@@ -1,6 +1,6 @@
 $SqlCmdVariables = @{
 }
-$TargetDatabase = 'ERP2'
+$TargetDatabase = 'ERP.Database'
 $OctoOptionDeployToLocalInstance = ''
 $SkipVariableValidation = ''
 $__isAzurePlatformTarget = 'False'

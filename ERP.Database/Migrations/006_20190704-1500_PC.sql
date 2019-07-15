@@ -1,5 +1,6 @@
 ﻿-- <Migration ID="f72418af-4d73-4e1f-b785-fde3072be56b" />
 GO
+
 PRINT N'Dropping foreign keys from [HR].[Employee]'
 GO
 ALTER TABLE [HR].[Employee] DROP CONSTRAINT [FK_Employee_Department]

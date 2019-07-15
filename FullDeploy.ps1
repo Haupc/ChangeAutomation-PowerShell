@@ -1,17 +1,28 @@
-# This step create the build artifact.
-
-# The built artifact will be export to $exportPath
-
-# Artifact name will be in format: " <PackageId>.<PackageVersion>.nupkg "
-
-$project = "D:\ChangeAutomation-PowerShell\ERP.Database\ERP.Database.sqlproj"
-$exportPath = "D:\ChangeAutomation-PowerShell\Artifact"
-# $exportFolder = ".\Artifact"
+$projectRelaPath = "ERP.Database\ERP.Database.sqlproj"
+$exportRelaPath = "Artifact"
 $PackageId = "MyDataBase"
 $PackageVersion = "1.0.0"
 
-$validatedProject = $project | Invoke-DatabaseBuild
+$target = New-DatabaseConnection -ServerInstance "PC" -Database "ERP" -Username "sa" -Password "123456a@"
+$ArtifactPath = Import-DatabaseBuildArtifact "Artifact\MyDatabase.1.0.0.nupkg"
+
+$project = $(Resolve-Path -Path $projectRelaPath)
+$exportPath = $(Resolve-Path -Path $exportRelaPath)
+
+# Build
+
+if (Test-Path -Path $exportPath)
+{
+    Remove-Item $exportPath -force -recurse
+}
+mkdir $exportPath
+
+$validatedProject =  $project | Invoke-DatabaseBuild
 $buildArtifact = $validatedProject | New-DatabaseBuildArtifact -PackageId $PackageId -PackageVersion $PackageVersion
 $buildArtifact | Export-DatabaseBuildArtifact -Path $exportPath
 
-# DONE
+# Deploy
+
+$update = New-DatabaseReleaseArtifact -Source $ArtifactPath -Target $target
+
+Use-DatabaseReleaseArtifact $update -DeployTo $target
