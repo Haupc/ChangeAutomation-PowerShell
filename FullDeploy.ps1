@@ -5,7 +5,8 @@
 # Artifact name will be in format: " <PackageId>.<PackageVersion>.nupkg "
 
 $project = "D:\ChangeAutomation-PowerShell\ERP.Database\ERP.Database.sqlproj"
-$exportPath = "C:\Users\PC\Desktop\Artifact"
+$exportPath = "D:\ChangeAutomation-PowerShell\Artifact"
+# $exportFolder = ".\Artifact"
 $PackageId = "MyDataBase"
 $PackageVersion = "1.0.0"
 
