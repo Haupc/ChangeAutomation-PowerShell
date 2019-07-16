@@ -34,6 +34,8 @@
     <TargetDatabaseSet>True</TargetDatabaseSet>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql140DatabaseSchemaProvider</DSP>
     <DeployChangesInitialImportDone>True</DeployChangesInitialImportDone>
+    <IncludeObjectsInDataSync />
+    <DeployChangesExecutionOrder />
   </PropertyGroup>
   <!-- SQL CHANGE AUTOMATION OFFLINE SCHEMA MODEL OPTIONS -->
   <!-- SQL CHANGE AUTOMATION PROGRAMMABLE OBJECT OPTIONS -->
@@ -283,9 +285,18 @@
     <None Include="Migrations\016_20190715-1040_PC.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Migrations\017_20190715-1107_PC.sql" />
+    <None Include="Migrations\018_20190715-1152_PC.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Migrations\018_20190715-1152_PC.sql" />
+    <None Include="Migrations\019_20190715-1444_PC.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\020_20190715-1534_PC.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\021_20190715-1652_PC.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\022_20190715-1824_PC.sql" />
   </ItemGroup>
 </Project>
