@@ -299,4 +299,7 @@
   <ItemGroup>
     <None Include="Migrations\022_20190715-1824_PC.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\023_20190716-0946_MiCrUx.sql" />
+  </ItemGroup>
 </Project>
