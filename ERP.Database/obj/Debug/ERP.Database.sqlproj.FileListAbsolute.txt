@@ -1,0 +1,10 @@
+D:\ChangeAutomation-PowerShell\ERP.Database\bin\Debug\ERP.Database_Package.sql
+D:\ChangeAutomation-PowerShell\ERP.Database\bin\Debug\ERP.Database_DeployPackage.ps1
+D:\ChangeAutomation-PowerShell\ERP.Database\bin\Debug\ERP.Database_Snapshot.nupkg.bin
+D:\ChangeAutomation-PowerShell\ERP.Database\bin\Debug\
+D:\ChangeAutomation-PowerShell\ERP.Database\bin\Debug\ERP.Database.dll
+D:\ChangeAutomation-PowerShell\ERP.Database\bin\Debug\ERP.Database.pdb
+D:\ChangeAutomation-PowerShell\ERP.Database\obj\Debug\ERP.Database.sqlprojResolveAssemblyReference.cache
+D:\ChangeAutomation-PowerShell\ERP.Database\obj\Debug\ERP.Database_Package.sql
+D:\ChangeAutomation-PowerShell\ERP.Database\obj\Debug\ERP.Database.dll
+D:\ChangeAutomation-PowerShell\ERP.Database\obj\Debug\ERP.Database.pdb
