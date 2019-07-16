@@ -1,12 +1,12 @@
 $projectRelaPath = "ERP.Database\ERP.Database.sqlproj"
+$target = New-DatabaseConnection -ServerInstance "PC" -Database "ERP" -Username "sa" -Password "123456a@"
 $exportRelaPath = "Artifact"
 $PackageId = "MyDataBase"
 $PackageVersion = "1.0.0"
-$ArtifactPath = "Artifact\MyDatabase.1.0.0.nupkg"
-$target = New-DatabaseConnection -ServerInstance "PC" -Database "ERP" -Username "sa" -Password "123456a@"
 
 $project = $(Resolve-Path -Path $projectRelaPath)
 $exportPath = $(Resolve-Path -Path $exportRelaPath)
+$ArtifactPath = $exportRelaPath + "\" + $PackageId + "." + $PackageVersion + ".nupkg"
 
 # Build
 
@@ -22,7 +22,6 @@ $buildArtifact | Export-DatabaseBuildArtifact -Path $exportPath
 
 # Deploy
 
-# 
 $Artifact = Import-DatabaseBuildArtifact $ArtifactPath
 
 $update = New-DatabaseReleaseArtifact -Source $Artifact -Target $target
