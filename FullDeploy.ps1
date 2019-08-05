@@ -1,20 +1,22 @@
 $projectRelaPath = "ERP.Database\ERP.Database.sqlproj"
-$target = New-DatabaseConnection -ServerInstance "PC" -Database "ERP" -Username "sa" -Password "123456a@"
+$target = New-DatabaseConnection -ServerInstance "." -Database "ERP" -Username "sa" -Password "123456a@"
 $exportRelaPath = "Artifact"
 $PackageId = "MyDataBase"
 $PackageVersion = "1.0.0"
 
 $project = $(Resolve-Path -Path $projectRelaPath)
-$exportPath = $(Resolve-Path -Path $exportRelaPath)
 $ArtifactPath = $exportRelaPath + "\" + $PackageId + "." + $PackageVersion + ".nupkg"
 
 # Build
 
-if (Test-Path -Path $exportPath)
+if (Test-Path -Path $exportRelaPath)
 {
-    Remove-Item $exportPath -force -recurse
+    Remove-Item $exportRelaPath -force -recurse
 }
-mkdir $exportPath
+mkdir $exportRelaPath
+
+
+$exportPath = $(Resolve-Path -Path $exportRelaPath)
 
 $validatedProject =  $project | Invoke-DatabaseBuild
 $buildArtifact = $validatedProject | New-DatabaseBuildArtifact -PackageId $PackageId -PackageVersion $PackageVersion
